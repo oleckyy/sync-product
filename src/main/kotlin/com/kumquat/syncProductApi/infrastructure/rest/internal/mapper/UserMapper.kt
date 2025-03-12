@@ -14,7 +14,7 @@ import java.util.*
 
 fun UserEntity.toUserAuthorization() =
     UserAuthorization(
-        id = id,
+        id = id!!,
         active = active,
         login = login,
         password = password,
@@ -23,7 +23,7 @@ fun UserEntity.toUserAuthorization() =
 
 fun UserEntity.toUserDto() =
     UserDto(
-        id = id,
+        id = id!!,
         active = active,
         login = login,
         privilege = privilege,

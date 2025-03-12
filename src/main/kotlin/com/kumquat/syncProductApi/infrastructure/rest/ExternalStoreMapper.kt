@@ -13,5 +13,6 @@ class ExternalStoreMapper {
             name = externalStoreDto.name,
             location = externalStoreDto.location,
             apiUrl = externalStoreDto.apiUrl,
+            versionDate = externalStoreDto.versionDate
         )
 }

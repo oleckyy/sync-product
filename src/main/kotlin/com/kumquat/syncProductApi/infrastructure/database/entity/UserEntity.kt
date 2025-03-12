@@ -8,7 +8,7 @@ import java.util.*
 data class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: UUID = UUID.randomUUID(),
+    val id: UUID? = null,
     @Column(nullable = false)
     val active: Boolean,
     @Column(nullable = false, unique = true)

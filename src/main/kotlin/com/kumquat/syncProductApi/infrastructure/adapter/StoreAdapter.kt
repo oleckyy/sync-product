@@ -1,11 +1,15 @@
 package com.kumquat.syncProductApi.infrastructure.adapter
 
+import com.kumquat.syncProductApi.domain.model.store.Store
 import com.kumquat.syncProductApi.domain.model.store.UpsertStoreCommand
 import com.kumquat.syncProductApi.domain.port.StorePort
 import com.kumquat.syncProductApi.infrastructure.adapter.mapper.StoreAdapterMapper
 import com.kumquat.syncProductApi.infrastructure.database.StoreEntityRepository
 import com.kumquat.syncProductApi.util.logger
 import org.springframework.stereotype.Service
+import java.util.*
+import java.util.function.Function
+import java.util.stream.Collectors
 
 @Service
 class StoreAdapter(
@@ -29,6 +33,15 @@ class StoreAdapter(
             }
             ?: throw IllegalStateException("Store with given external ID: ${upsertStoreCommand.externalId} not found!")
     }
+
+    override fun findAllStoresInGroupedByExternalId(externalIds: List<UUID>): Map<UUID, Store> {
+        return storeEntityRepository.findAllByExternalIdIn(externalIds).stream()
+            .map(storeAdapterMapper::toStore)
+            .collect(Collectors.toMap(Store::externalId, Function.identity()))
+    }
+
+    override fun existsByExternalId(externalId: UUID) =
+        storeEntityRepository.existsByExternalId(externalId)
 
     companion object {
         private val log by logger()

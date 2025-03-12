@@ -8,4 +8,8 @@ import java.util.UUID
 @Repository
 interface StoreEntityRepository: JpaRepository<StoreEntity, UUID>{
     fun findByExternalId(externalId: UUID): StoreEntity?
+
+    fun findAllByExternalIdIn(externalIds: List<UUID>): List<StoreEntity>
+
+    fun existsByExternalId(externalId: UUID): Boolean
 }
