@@ -17,7 +17,7 @@ import java.util.*
 class JwtTokenProvider {
     fun generateToken(authentication: Authentication): String {
         val user = authentication.principal as User
-        val expirationDate = Date(System.currentTimeMillis() + JWT_EXPIRATION_IN_MS)
+        val expirationDate = Date(System.currentTimeMillis() + JWT_EXPIRATION_MS)
         return Jwts.builder()
             .subject(user.username)
             .issuedAt(Date())
@@ -44,13 +44,18 @@ class JwtTokenProvider {
             },
             onFailure = { exception ->
                 when (exception) {
-                    is SignatureException -> {
-                        log.warn("Invalid JWT signature")
+                    is IllegalArgumentException -> {
+                        log.warn("JWT claims string is empty.")
                         false
                     }
 
                     is ExpiredJwtException -> {
                         log.warn("Expired JWT token")
+                        false
+                    }
+
+                    is SignatureException -> {
+                        log.warn("Invalid JWT signature")
                         false
                     }
 
@@ -64,13 +69,8 @@ class JwtTokenProvider {
                         false
                     }
 
-                    is IllegalArgumentException -> {
-                        log.warn("JWT claims string is empty.")
-                        false
-                    }
-
                     else -> {
-                        log.warn("JWT token not validated! Unknown Exception was thrown")
+                        log.warn("JWT token not validated!")
                         false
                     }
                 }
@@ -79,9 +79,9 @@ class JwtTokenProvider {
     }
 
     companion object {
-        const val JWT_EXPIRATION_IN_MS = 28_800_000
+        const val JWT_EXPIRATION_MS = 20_00_000
         const val JWT_SECRET_BASE_64 =
-            "4/8R1heOMF7k52BIttOMNMbiE3Lz+zgJSsiRwy4QfC/N7bMFKw6UWgXvSzHz8HxzalBgwQHFuk3GM2t29YrIbQ=="
+            "dGhpc0lzQW5FeGFtcGxlU2VjcmV0S2V5VGhhdElzMzJCeXRlcw==\n"
         val SECRET_KEY = Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_SECRET_BASE_64))
         private val log by logger()
     }
