@@ -9,6 +9,8 @@ interface StorePort {
 
     fun updateStore(upsertStoreCommand: UpsertStoreCommand)
 
+    fun findAllActiveStores(): List<Store>
+
     fun findAllStoresInGroupedByExternalId(externalIds: List<UUID>): Map<UUID, Store>
 
     fun existsByExternalId(externalId: UUID): Boolean

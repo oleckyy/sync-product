@@ -2,7 +2,7 @@ package com.kumquat.syncProductApi.infrastructure.rest.external.service
 
 import com.kumquat.syncProductApi.domain.client.ExternalStoreClient
 import com.kumquat.syncProductApi.domain.model.externalStore.ExternalStore
-import com.kumquat.syncProductApi.infrastructure.rest.ExternalStoreMapper
+import com.kumquat.syncProductApi.infrastructure.rest.external.mapper.ExternalStoreMapper
 import com.kumquat.syncProductApi.infrastructure.rest.external.dto.store.ExternalStoreDto
 import com.kumquat.syncProductApi.infrastructure.rest.external.dto.store.ExternalStoreResponse
 import com.kumquat.syncProductApi.util.logger

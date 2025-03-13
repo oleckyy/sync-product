@@ -12,7 +12,7 @@ import java.util.function.Function
 import java.util.stream.Collectors
 
 @Service
-class StoreAdapter(
+class StoreDatabaseAdapter(
     private val storeEntityRepository: StoreEntityRepository,
     private val storeAdapterMapper: StoreAdapterMapper
 ) : StorePort {
@@ -27,16 +27,21 @@ class StoreAdapter(
         log.info("[STORE] Updating store. $upsertStoreCommand")
         storeEntityRepository.findByExternalId(upsertStoreCommand.externalId)
             ?.let { foundStoreEntity ->
-                val updatedStoreEntity = storeAdapterMapper.toUpdatedStoreEntity(upsertStoreCommand,foundStoreEntity)
+                val updatedStoreEntity = storeAdapterMapper.toUpdatedStoreEntity(upsertStoreCommand, foundStoreEntity)
                 val savedStoreEntity = storeEntityRepository.save(updatedStoreEntity)
                 log.info("[STORE] Successfully updated store. $savedStoreEntity")
             }
             ?: throw IllegalStateException("Store with given external ID: ${upsertStoreCommand.externalId} not found!")
     }
 
+    override fun findAllActiveStores(): List<Store> {
+        return storeEntityRepository.findAllByActiveTrue()
+            .map { storeAdapterMapper.toStore(it) }
+    }
+
     override fun findAllStoresInGroupedByExternalId(externalIds: List<UUID>): Map<UUID, Store> {
         return storeEntityRepository.findAllByExternalIdIn(externalIds).stream()
-            .map(storeAdapterMapper::toStore)
+            .map { storeAdapterMapper.toStore(it) }
             .collect(Collectors.toMap(Store::externalId, Function.identity()))
     }
 

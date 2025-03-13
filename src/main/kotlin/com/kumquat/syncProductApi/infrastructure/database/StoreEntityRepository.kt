@@ -11,5 +11,7 @@ interface StoreEntityRepository: JpaRepository<StoreEntity, UUID>{
 
     fun findAllByExternalIdIn(externalIds: List<UUID>): List<StoreEntity>
 
+    fun findAllByActiveTrue(): List<StoreEntity>
+
     fun existsByExternalId(externalId: UUID): Boolean
 }

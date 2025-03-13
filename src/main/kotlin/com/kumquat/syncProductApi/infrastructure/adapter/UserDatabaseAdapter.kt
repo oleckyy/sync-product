@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class UserAdapter(
+class UserDatabaseAdapter(
     private val userEntityRepository: UserEntityRepository,
     private val userAdapterMapper: UserAdapterMapper,
     private val passwordEncoder: PasswordEncoder

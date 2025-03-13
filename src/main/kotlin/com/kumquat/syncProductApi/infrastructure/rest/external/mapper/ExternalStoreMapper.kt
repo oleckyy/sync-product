@@ -1,4 +1,4 @@
-package com.kumquat.syncProductApi.infrastructure.rest
+package com.kumquat.syncProductApi.infrastructure.rest.external.mapper
 
 import com.kumquat.syncProductApi.domain.model.externalStore.ExternalStore
 import com.kumquat.syncProductApi.infrastructure.rest.external.dto.store.ExternalStoreDto
