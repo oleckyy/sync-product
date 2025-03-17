@@ -20,6 +20,7 @@ class StoreAdapterMapper {
 
     fun toUpdatedStoreEntity(upsertStoreCommand: UpsertStoreCommand, storeEntity: StoreEntity) =
         storeEntity.copy(
+            externalId = upsertStoreCommand.externalId,
             active = upsertStoreCommand.active,
             name = upsertStoreCommand.name,
             location = upsertStoreCommand.location,

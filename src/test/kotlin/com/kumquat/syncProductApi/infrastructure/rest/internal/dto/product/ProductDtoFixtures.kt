@@ -1,19 +1,19 @@
-package com.kumquat.syncProductApi.domain.model.product
+package com.kumquat.syncProductApi.infrastructure.rest.internal.dto.product
 
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.*
 
-object ProductFixtures {
+object ProductDtoFixtures {
     fun withCompleteData(
         id: UUID = UUID.randomUUID(),
         externalId: UUID = UUID.randomUUID(),
         storeId: UUID = UUID.randomUUID(),
-        name: String = "Testowy Produkt",
+        name: String = "Sample Product",
         priceNet: BigDecimal = BigDecimal("99.99"),
-        vatValue: BigDecimal = BigDecimal("23.00"),
+        vatValue: BigDecimal = BigDecimal("19.00"),
         versionDate: LocalDateTime = LocalDateTime.now()
-    ) = Product(
+    ) = ProductDto(
         id = id,
         externalId = externalId,
         storeId = storeId,
@@ -22,6 +22,4 @@ object ProductFixtures {
         vatValue = vatValue,
         versionDate = versionDate
     )
-
-    fun withExternalId(externalId: UUID) = withCompleteData().copy(externalId = externalId)
 }

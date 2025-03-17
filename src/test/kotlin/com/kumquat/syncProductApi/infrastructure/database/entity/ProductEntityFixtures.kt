@@ -1,23 +1,25 @@
-package com.kumquat.syncProductApi.domain.model.externalProduct
+package com.kumquat.syncProductApi.infrastructure.database.entity
 
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.*
 
-object ExternalProductFixtures {
+object ProductEntityFixtures {
     fun withCompleteData(
-        id: UUID = UUID.randomUUID(),
-        name: String = "Produkt Testowy",
+        id: UUID? = UUID.randomUUID(),
+        externalId: UUID = UUID.randomUUID(),
+        storeId: UUID = UUID.randomUUID(),
+        name: String = "Sample Product",
         priceNet: BigDecimal = BigDecimal("100.00"),
         vatValue: BigDecimal = BigDecimal("23.00"),
         versionDate: LocalDateTime = LocalDateTime.now()
-    ) = ExternalProduct(
+    ) = ProductEntity(
         id = id,
+        externalId = externalId,
+        storeId = storeId,
         name = name,
         priceNet = priceNet,
         vatValue = vatValue,
         versionDate = versionDate
     )
-
-    fun withVersionDate(versionDate: LocalDateTime) = withCompleteData().copy(versionDate = versionDate)
 }
