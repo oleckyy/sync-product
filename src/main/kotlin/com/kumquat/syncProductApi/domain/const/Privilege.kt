@@ -8,7 +8,7 @@ enum class Privilege(val value: String, val type: Int) {
     companion object {
         fun fromType(type: Int) = entries.firstOrNull { it.type == type }
             ?: UNKNOWN
-        const val ADMIN = "ADMIN"
-        const val USER = "USER"
+        const val ADMIN_ROLE = "ADMIN"
+        const val USER_ROLE = "USER"
     }
 }

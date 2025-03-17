@@ -1,7 +1,7 @@
 package com.kumquat.syncProductApi.infrastructure.rest.internal
 
-import com.kumquat.syncProductApi.domain.const.Privilege.Companion.ADMIN
-import com.kumquat.syncProductApi.domain.const.Privilege.Companion.USER
+import com.kumquat.syncProductApi.domain.const.Privilege.Companion.ADMIN_ROLE
+import com.kumquat.syncProductApi.domain.const.Privilege.Companion.USER_ROLE
 import com.kumquat.syncProductApi.infrastructure.rest.internal.dto.product.ProductFiltersDto
 import com.kumquat.syncProductApi.infrastructure.rest.internal.service.ProductService
 import org.springframework.data.domain.Pageable
@@ -18,7 +18,7 @@ class ProductController(
     private val productService: ProductService
 ) {
     @GetMapping
-    @Secured(value = [USER, ADMIN])
+    @Secured(value = [USER_ROLE, ADMIN_ROLE])
     fun findAll(
         pageable: Pageable,
         @RequestBody filtersDto: ProductFiltersDto

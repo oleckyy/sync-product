@@ -5,7 +5,7 @@ import com.kumquat.syncProductApi.application.usecase.user.CreatingUser
 import com.kumquat.syncProductApi.application.usecase.user.DeactivatingUser
 import com.kumquat.syncProductApi.application.usecase.user.UpdatingUser
 import com.kumquat.syncProductApi.domain.const.MessageType
-import com.kumquat.syncProductApi.domain.const.Privilege.Companion.ADMIN
+import com.kumquat.syncProductApi.domain.const.Privilege.Companion.ADMIN_ROLE
 import com.kumquat.syncProductApi.infrastructure.rest.internal.dto.Response
 import com.kumquat.syncProductApi.infrastructure.rest.internal.dto.user.CreateUserRequest
 import com.kumquat.syncProductApi.infrastructure.rest.internal.dto.user.UpdateUserRequest
@@ -29,17 +29,17 @@ class UserController(
     private val deactivatingUser: DeactivatingUser,
 ) {
     @GetMapping
-    @Secured(ADMIN)
+    @Secured(ADMIN_ROLE)
     fun findAll(): ResponseEntity<*> = ResponseEntity.ok(userService.findAll())
 
     @GetMapping("/{id}")
-    @Secured(ADMIN)
+    @Secured(ADMIN_ROLE)
     fun findById(
         @PathVariable id: UUID,
     ): ResponseEntity<*> = ResponseEntity.ok(userService.fetchByIdOrThrow(id))
 
     @PostMapping
-    @Secured(ADMIN)
+    @Secured(ADMIN_ROLE)
     fun create(
         @RequestBody createUserRequest: CreateUserRequest,
     ): ResponseEntity<*> =
@@ -47,7 +47,7 @@ class UserController(
             .let { ResponseEntity.ok(Response.withMessage(MessageType.USER_CREATED)) }
 
     @PatchMapping
-    @Secured(ADMIN)
+    @Secured(ADMIN_ROLE)
     fun update(
         @RequestBody updateUserRequest: UpdateUserRequest,
     ): ResponseEntity<*> =
@@ -55,7 +55,7 @@ class UserController(
             .let { ResponseEntity.ok(Response.withMessage(MessageType.USER_UPDATED)) }
 
     @PatchMapping("/{id}/activate")
-    @Secured(ADMIN)
+    @Secured(ADMIN_ROLE)
     fun activateUser(
         @PathVariable id: UUID,
     ): ResponseEntity<*> =
@@ -63,7 +63,7 @@ class UserController(
             .let { ResponseEntity.ok(Response.withMessage(MessageType.USER_ACTIVATED)) }
 
     @PatchMapping("/{id}/deactivate")
-    @Secured(ADMIN)
+    @Secured(ADMIN_ROLE)
     fun deactivateUser(
         @PathVariable id: UUID,
     ): ResponseEntity<*> =
