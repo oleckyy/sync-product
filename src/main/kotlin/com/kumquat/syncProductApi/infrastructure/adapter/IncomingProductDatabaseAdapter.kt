@@ -1,22 +1,21 @@
 package com.kumquat.syncProductApi.infrastructure.adapter
 
 import com.kumquat.syncProductApi.domain.accessor.ProductSynchronizationAccessor
-import com.kumquat.syncProductApi.domain.model.product.Product
 import com.kumquat.syncProductApi.domain.model.product.UpsertProductCommand
-import com.kumquat.syncProductApi.domain.port.ProductPort
+import com.kumquat.syncProductApi.domain.port.IncomingProductDatabasePort
 import com.kumquat.syncProductApi.infrastructure.adapter.mapper.ProductAdapterMapper
 import com.kumquat.syncProductApi.infrastructure.database.ProductEntityRepository
 import com.kumquat.syncProductApi.util.logger
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
-class ProductDatabaseAdapter(
+class IncomingProductDatabaseAdapter(
     private val productAdapterMapper: ProductAdapterMapper,
     private val productEntityRepository: ProductEntityRepository,
     private val productSynchronizationAccessor: ProductSynchronizationAccessor
-) : ProductPort {
+) : IncomingProductDatabasePort {
+
     override fun create(upsertProductCommand: UpsertProductCommand) {
         log.info("[PRODUCT] Adding product. $upsertProductCommand")
         val productToCreate = productAdapterMapper.toCreatedProductEntity(upsertProductCommand)
@@ -37,11 +36,6 @@ class ProductDatabaseAdapter(
             log.info("[PRODUCT] Successfully updated product. $savedProductEntity")
         }
     }
-
-    override fun findAllByStoreIdGroupedByExternalId(externalIds: List<UUID>, storeId: UUID): Map<UUID, Product> =
-        productEntityRepository.findAllByStoreIdAndExternalIdIn(storeId, externalIds)
-            .map { productAdapterMapper.toProduct(it) }
-            .associateBy { it.externalId }
 
     companion object {
         private val log by logger()

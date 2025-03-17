@@ -3,7 +3,8 @@ package com.kumquat.syncProductApi.application.synchronization.store
 import com.kumquat.syncProductApi.application.synchronization.store.mapper.StoreSynchronizationMapper
 import com.kumquat.syncProductApi.domain.client.ExternalStoreClient
 import com.kumquat.syncProductApi.domain.model.externalStore.ExternalStore
-import com.kumquat.syncProductApi.domain.port.StorePort
+import com.kumquat.syncProductApi.domain.port.IncomingStoreDatabasePort
+import com.kumquat.syncProductApi.domain.port.OutgoingStoreDatabasePort
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -12,7 +13,8 @@ import org.springframework.stereotype.Service
 class StoreSynchronizationManager(
     //TODO add registry entities with predetermined value for store hub api url
    // private val registryPort: RegistryPort,
-    private val storePort: StorePort,
+    private val outgoingStoreDatabasePort: OutgoingStoreDatabasePort,
+    private val incomingStoreDatabasePort: IncomingStoreDatabasePort,
     private val externalStoreClient: ExternalStoreClient,
     private val storeSynchronizationMapper: StoreSynchronizationMapper
 ) {
@@ -23,16 +25,16 @@ class StoreSynchronizationManager(
     }
     private fun createOrUpdateStores(externalStores: List<ExternalStore>) {
         val externalStoreIds = externalStores.map { it.id }
-        val foundStores = storePort.findAllStoresInGroupedByExternalId(externalStoreIds)
+        val foundStores = outgoingStoreDatabasePort.findAllStoresInGroupedByExternalId(externalStoreIds)
         externalStores.forEach { externalStore ->
             val upsertStoreCommand =
                 storeSynchronizationMapper.toUpsertStoreCommand(externalStore)
             foundStores[externalStore.id]
                 ?.takeIf { externalStore.versionDate.isAfter(it.versionDate) }
-                ?.let { storePort.updateStore(upsertStoreCommand) }
+                ?.let { incomingStoreDatabasePort.updateStore(upsertStoreCommand) }
                 ?: let {
-                    if (!storePort.existsByExternalId(externalStore.id)) {
-                        storePort.createStore(upsertStoreCommand)
+                    if (!outgoingStoreDatabasePort.existsByExternalId(externalStore.id)) {
+                        incomingStoreDatabasePort.createStore(upsertStoreCommand)
                     }
                 }
         }
